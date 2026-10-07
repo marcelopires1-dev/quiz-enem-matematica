@@ -123,7 +123,7 @@
                 </div>
 
                 <div class="pt-2">
-                    <button id="btn-start" type="button" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center mx-auto space-x-2 text-base">
+                    <button id="btn-start" type="button" onclick="startQuiz()" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center mx-auto space-x-2 text-base">
                         <span>Iniciar Simulado Agora</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -730,13 +730,19 @@
 
         // Inicialização do aplicativo ao carregar a página
         document.addEventListener('DOMContentLoaded', () => {
-            initNavigatorButtons();
-
-            // Liga o botão de início diretamente ao evento de clique.
-            // Isso evita problemas com onclick inline em alguns ambientes de hospedagem/navegadores.
+            // Primeiro registra o botão de início. Assim, um erro na criação
+            // do navegador de questões não impede o início do simulado.
             const startButton = document.getElementById('btn-start');
             if (startButton) {
                 startButton.addEventListener('click', startQuiz);
+            }
+
+            // O navegador é auxiliar; se houver algum problema nele,
+            // o botão de início continua funcionando.
+            try {
+                initNavigatorButtons();
+            } catch (error) {
+                console.error('Erro ao montar o navegador de questões:', error);
             }
         });
 
